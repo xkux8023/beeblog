@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Binary Tree</title>
+</head>
+<body>
+    
+<script type="text/javascript">
+    function BinaryTree(){
+        var Node = function(key){
+            this.key = key;
+            this.left = null;
+            this.right = null;
+        }
+
+        // 定义一个根节点
+        var root = null;
+
+        // 插入节点insertNode函数的实现逻辑
+        var insertNode = function(node, newNode) {
+
+            // 如果新节点的值小于老节点的值
+            if (newNode.key < node.key) {
+                // 如果此时老节点左边没有子节点
+                if (node.left === null) {
+                    // 则把新节点当做老节点的左节点
+                    node.left = newNode；
+                } else {
+                    // 如果此时老节点左边有子节点，则往下插入
+                    insertNode(node.left, newNode)；
+                }
+            } else {
+                // 如果新节点的值 大 于 老节点的值
+                if (node.right === null) {
+                    // 此时老节点 右边 没有子节点，则把新节点当做老节点的 右节点
+                    node.right = newNode;
+                } else {
+                    // 如果此时老节点 右边 有子节点，则往下插入
+                    insertNode(node.right, newNode)；
+                }
+            }
+
+        }
+
+        // 定义插入节点的动作函数
+        this.insert = function(key){
+
+            // 构造一个节点对象
+            var newNode = new Node(key);
+
+            // 首先判断是否有根节点
+            if (root = null) {
+                // 如果根节点为空，就把刚刚上面构造的节点当做根节点
+                root = newNode
+            } else {
+                // 否则就根据二叉树规则插入
+                insertNode(root, newNode)
+            }
+        }
+        
+        // --------------中序遍历部分如下---------------------------
+        var inOrderTraverseNode = function(){
+            if (node != null) {
+                // 如果当前节点非空，则访问这个节点的左子树
+                inOrderTraverseNode(node.left,callback);
+
+                // 把当前节点传到回到函数callback中
+                callback(node.key);
+                
+                // 这时候去访问当前节点的右子树
+                inOrderTraverseNode(node.right,callback);
+
+            }
+        }
+
+        // 定义一个中序遍历的接口
+        this.inOrderTraverse = function(callback){
+            inOrderTraverseNode(root, callback);
+        }
+
+        // -----------------前序遍历部分如下------------------------
+
+        this.preOrderTraverseNode = function(node, callback){
+            if (node !== null) {
+                // 先打印当前节点
+                callback(node.key);
+                // 再遍历当前节点的左子树
+                preOrderTraverseNode(node.left, callback);
+                // 再遍历当前节点的右子树
+                preOrderTraverseNode(node.right, callback);
+
+            }
+        }
+        
+        // 定义一个前序遍历的接口
+        this.preOrderTraverse = function(callback){
+            preOrderTraverseNode(root, callback);
+        }
+
+        // -----------------前序遍历部分如下------------------------
+        var postOrderTraverseNode =function(node, callback){
+            if (node !== null) {                
+                // 先遍历当前节点的左子树
+                postOrderTraverseNode(node.left, callback);
+                // 再遍历当前节点的右子树
+                postOrderTraverseNode(node.right, callback);
+                // 最后打印当前节点
+                callback(node.key);
+
+            }
+        }
+
+        // 定义一个前序遍历的接口
+        this.postOrderTraverse = function(callback){
+            postOrderTraverseNode(root, callback);
+        }
+
+        // -----------------节点的查找------------------------
+        var minNode = function(node){
+            // 如果当前节点不为空
+            if (node) {
+                // 进入左子树一直访问到没有左子树的节点为止
+                while (node && node.left !==null) {
+                    node = node.left;
+                }
+                // 然后返回这个没有左子树的节点的值
+                return node.key;
+            }
+            return null;
+        }
+        // 找最小节点
+        this.min = function(){
+            return minNode(root)
+        }
+        
+
+
+        var maxNode = function(node){
+            // 如果当前节点不为空
+            if (node) {
+                // 进入右子树一直访问到没有右子树的节点为止
+                while (node && node.right !==null) {
+                    node = node.right;
+                }
+                // 然后返回这个没有右子树的节点的值
+                return node.key;
+            }
+            return null;
+        }
+
+        // 找最大节点
+        this.max = function(){
+            return maxNode(root)
+        }
+
+
+
+        var $searchNode = function(node, key){
+            // 如果当前节点不存在
+            if (node === null) {
+                // 则查找失败
+                return false;
+            }
+            
+            // 如果要查找的节点数值小于当前节点的数值
+            if (key < node.key) {
+                // 则进入当前节点的左子树进行查找
+                return searchNode(node.left, key);
+            } else if {
+                // 反之则进入当前节点的右子树进行查找
+                return searchNode(node.right, key)
+            } else {
+                // 如果正好相等,则查找成功
+                return true;
+            }
+        }
+
+        // 查找某个指定节点
+        this.search = function(key){
+            return $searchNode(root, key);
+        }
+
+        // -----------------节点的删除------------------------
+        var findMinNode = function(node){
+            if (node) {
+                while (node && node.left !== null) {
+                    node = node.left;
+                }
+                
+                // 返回最小节点对象
+                return node;
+            }
+        }
+        var removeNode = function(node, key){
+            if(node === null) {
+                return null
+            }
+            
+            // 如果要找的数值小于当前节点的数值
+            if (key < node.key) {
+                // 则进入当前数值的左子树
+                node.left = removeNode(node.left, key);
+                return node;
+            } else if {
+                // 则进入当前数值的右子树
+                node.right = removeNode(node.right, key);
+            } else {
+                // 如果是叶子节点
+                if (node.left === null && node.right === null) {
+                    node = null;
+                    return node;
+                }
+                // 如果只有右子树
+                if (node.left === null) {
+                    node = node.right;
+                    return node;
+                } else if (node.right === null){
+                    // 如果只有左子树
+                    node = node.left;
+                    return node;
+                }
+
+                // 如果即有左子树也有右子树
+                var aux = findMinNode(node.right);
+                node.key = aux.key;
+                node.right = removeNode(node.right, aux.key);
+                return node;
+            }
+        }
+
+        // 删除某个节点
+        this.remove = function(key){
+            root = removeNode(root, key);
+        }
+    }
+
+    // 定义一个要插入节点的数组
+
+    var node = [8, 3, 10, 1, 6, 14, 4, 7, 13];
+
+    // 构造一个二叉树对象
+    var binaryTree = BinaryTree();
+
+    nodes.forEach(function(key){
+        // 将数组插入整颗二叉树
+        binaryTree.insert(key);
+    });
+
+    // -----------------------------------------
+
+    // 回调函数的实现
+    var callback = function(key){
+        // 打印当前节点的值到控制台
+        console.log(key);
+    }
+
+    // 调用中序遍历的接口实现整个中序遍历的流程
+    binaryTree.inOrderTraverse(callback);
+
+    // -----------------------------------------
+
+    // 调用前序遍历的接口实现整个前序遍历的流程
+    binaryTree.preOrderTraverse(callback);
+
+    // -----------------------------------------
+
+    // 调用后序遍历的接口实现整个后序遍历的流程
+    binaryTree.preOrderTraverse(callback);
+
+    // -----------------------------------------
+
+    // 打印出这个最小节点的值 和 最大节点的值 和指定节点
+    console.log("the min node is: " + binaryTree.min());
+    console.log("the min node is: " + binaryTree.max());
+    console.log(binaryTree.search(7) ? 'key 7 is found' : 'key 7 is not found');
+    console.log(binaryTree.search(9) ? 'key 9 is found' : 'key 9 is not found');
+
+    // 删除叶子节点
+    binaryTree.removeNode(1);
+    // 删除只有左子树的节点
+    binaryTree.removeNode(4);
+    // 删除只有右子树的节点
+    binaryTree.removeNode(10);
+    // 删除即有左子树也有右子树的节点
+    binaryTree.removeNode(3);
+
+
+</script>    
+</body>
+</html>
